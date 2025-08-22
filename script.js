@@ -39,7 +39,7 @@ function triggerPanic() {
     // Update button text to show it's activated
     const panicText = panicButton.querySelector('.panic-text');
     const originalText = panicText.textContent;
-    panicText.textContent = '🎵 AUDIO ACTIVATED! 🎵';
+    panicText.textContent = '🎵 KASHMIR FUN ACTIVATED! 🎵';
     
     // Shake the entire page
     body.style.animation = 'emergency-shake 0.5s ease-in-out';
@@ -213,14 +213,14 @@ function initCrisisProgression() {
 function playIntroSound() {
     try {
         // Create audio element
-        const audio = new Audio('ammi-bacha-la-re.mp3');
+        const audio = new Audio('kashmirifun_17dc841a5005004.mp3');
         
         // Set volume to a reasonable level (0.5 = 50%)
         audio.volume = 0.5;
         
         // Add event listeners for better user experience
         audio.addEventListener('canplaythrough', function() {
-            console.log('Audio loaded successfully');
+            console.log('Kashmir fun audio loaded successfully');
         });
         
         audio.addEventListener('error', function(e) {
