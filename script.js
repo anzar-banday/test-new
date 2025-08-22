@@ -1,4 +1,4 @@
-// Enhanced interactivity for the crowdfunding website
+// Emergency Broadcast System - Enhanced interactivity for the crowdfunding website
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all interactive features
@@ -8,7 +8,363 @@ document.addEventListener('DOMContentLoaded', function() {
     initShareFunctionality();
     initCountdown();
     initAnimations();
+    initEmergencyFeatures();
 });
+
+// Emergency Broadcast Features
+function initEmergencyFeatures() {
+    // Add emergency sound effects (optional)
+    initEmergencySounds();
+    
+    // Add crisis level indicators
+    initCrisisIndicators();
+    
+    // Add emergency broadcast effects
+    initEmergencyEffects();
+    
+    // Note: Audio will play when panic button is pressed (user interaction required)
+    console.log('Emergency broadcast ready - click panic button for audio!');
+}
+
+// Panic Button Function
+function triggerPanic() {
+    // Create dramatic panic effect
+    const panicButton = document.querySelector('.panic-button');
+    const body = document.body;
+    
+    // Visual panic effect
+    panicButton.style.transform = 'scale(1.2)';
+    panicButton.style.background = 'linear-gradient(45deg, #ef4444, #dc2626)';
+    
+    // Update button text to show it's activated
+    const panicText = panicButton.querySelector('.panic-text');
+    const originalText = panicText.textContent;
+    panicText.textContent = '🎵 AUDIO ACTIVATED! 🎵';
+    
+    // Shake the entire page
+    body.style.animation = 'emergency-shake 0.5s ease-in-out';
+    
+    // Flash emergency colors
+    const flashEffect = document.createElement('div');
+    flashEffect.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(220, 38, 38, 0.3);
+        z-index: 9999;
+        pointer-events: none;
+        animation: emergency-flash 0.5s ease-out;
+    `;
+    document.body.appendChild(flashEffect);
+    
+    // Play the main MP3 sound
+    playIntroSound();
+    
+    // Emergency alert sound (if supported)
+    playEmergencySound();
+    
+    // Show emergency message
+    showEmergencyAlert();
+    
+    // Reset after effects
+    setTimeout(() => {
+        panicButton.style.transform = 'scale(1)';
+        panicButton.style.background = 'linear-gradient(45deg, #dc2626, #ef4444)';
+        body.style.animation = '';
+        flashEffect.remove();
+        panicText.textContent = originalText;
+    }, 3000);
+}
+
+// Emergency sound effects
+function initEmergencySounds() {
+    // Create audio context for emergency sounds
+    if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+        window.audioContext = new (AudioContext || webkitAudioContext)();
+    }
+}
+
+function playEmergencySound() {
+    if (window.audioContext) {
+        try {
+            const oscillator = window.audioContext.createOscillator();
+            const gainNode = window.audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(window.audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, window.audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(600, window.audioContext.currentTime + 0.1);
+            oscillator.frequency.setValueAtTime(800, window.audioContext.currentTime + 0.2);
+            
+            gainNode.gain.setValueAtTime(0.1, window.audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioContext.currentTime + 0.3);
+            
+            oscillator.start(window.audioContext.currentTime);
+            oscillator.stop(window.audioContext.currentTime + 0.3);
+        } catch (e) {
+            console.log('Audio not supported or blocked');
+        }
+    }
+}
+
+// Crisis level indicators
+function initCrisisIndicators() {
+    // Add real-time crisis level updates
+    const crisisLevel = document.querySelector('.crisis-text');
+    if (crisisLevel) {
+        const crisisLevels = [
+            'CRISIS LEVEL: MAXIMUM',
+            'CRISIS LEVEL: CRITICAL',
+            'CRISIS LEVEL: EMERGENCY',
+            'CRISIS LEVEL: MAXIMUM'
+        ];
+        
+        let currentIndex = 0;
+        setInterval(() => {
+            crisisLevel.textContent = crisisLevels[currentIndex];
+            currentIndex = (currentIndex + 1) % crisisLevels.length;
+        }, 3000);
+    }
+}
+
+// Emergency effects
+function initEmergencyEffects() {
+    // Add pulsing effect to emergency elements
+    const emergencyElements = document.querySelectorAll('.emergency-alert, .crisis-level, .panic-button');
+    
+    emergencyElements.forEach(element => {
+        element.addEventListener('mouseenter', function() {
+            this.style.animation = 'emergency-pulse 0.5s infinite';
+        });
+        
+        element.addEventListener('mouseleave', function() {
+            this.style.animation = '';
+        });
+    });
+    
+    // Add interactive effects to emergency gallery items
+    const emergencyItems = document.querySelectorAll('.emergency-item, .crisis-item');
+    
+    emergencyItems.forEach((item, index) => {
+        // Add staggered animation on page load
+        item.style.animationDelay = `${index * 0.2}s`;
+        item.style.animation = 'fadeInUp 0.6s ease-out forwards';
+        
+        // Add click effects
+        item.addEventListener('click', function() {
+            this.style.transform = 'scale(1.05) rotate(2deg)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 300);
+            
+            // Play emergency sound on click
+            playEmergencySound();
+        });
+        
+        // Add hover effects
+        item.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 25px 50px rgba(220, 38, 38, 0.6)';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.boxShadow = '';
+        });
+    });
+    
+    // Add crisis level progression
+    initCrisisProgression();
+}
+
+// Crisis progression effect
+function initCrisisProgression() {
+    const crisisItems = document.querySelectorAll('.crisis-item');
+    const emergencyItems = document.querySelectorAll('.emergency-item');
+    
+    // Create a progression effect through the galleries
+    let currentPhase = 0;
+    const phases = [
+        { elements: emergencyItems, message: '🚨 PHASE 1: Emergency Situation Detected 🚨' },
+        { elements: crisisItems, message: '🔥 PHASE 2: Crisis Escalation in Progress 🔥' }
+    ];
+    
+    setInterval(() => {
+        // Reset all phases
+        emergencyItems.forEach(item => item.style.borderColor = '#dc2626');
+        crisisItems.forEach(item => item.style.borderColor = '#fbbf24');
+        
+        // Highlight current phase
+        const currentPhaseData = phases[currentPhase];
+        currentPhaseData.elements.forEach(item => {
+            item.style.borderColor = '#fbbf24';
+            item.style.boxShadow = '0 0 30px rgba(251, 191, 36, 0.8)';
+        });
+        
+        // Show phase message
+        showPhaseMessage(currentPhaseData.message);
+        
+        currentPhase = (currentPhase + 1) % phases.length;
+    }, 5000);
+}
+
+// Play intro sound (MP3 file)
+function playIntroSound() {
+    try {
+        // Create audio element
+        const audio = new Audio('ammi-bacha-la-re.mp3');
+        
+        // Set volume to a reasonable level (0.5 = 50%)
+        audio.volume = 0.5;
+        
+        // Add event listeners for better user experience
+        audio.addEventListener('canplaythrough', function() {
+            console.log('Audio loaded successfully');
+        });
+        
+        audio.addEventListener('error', function(e) {
+            console.log('Audio error:', e);
+        });
+        
+        // Play the sound
+        audio.play().catch(function(error) {
+            console.log('Audio play failed:', error);
+            // Fallback: show a message to user to interact first
+            showAudioPermissionMessage();
+        });
+        
+        // Store audio reference for potential reuse
+        window.introAudio = audio;
+        
+    } catch (error) {
+        console.log('Audio creation failed:', error);
+    }
+}
+
+// Show message if audio permission is needed
+function showAudioPermissionMessage() {
+    const message = document.createElement('div');
+    message.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        z-index: 10000;
+        text-align: center;
+        font-weight: 700;
+        font-size: 1.125rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        max-width: 400px;
+    `;
+    
+    message.innerHTML = `
+        🎵 AUDIO ALERT 🎵<br><br>
+        Click anywhere to enable sound effects!<br>
+        (Browser requires user interaction for audio)
+    `;
+    
+    document.body.appendChild(message);
+    
+    // Remove message when user clicks anywhere
+    const removeMessage = () => {
+        message.remove();
+        document.removeEventListener('click', removeMessage);
+        // Try playing audio again after user interaction
+        if (window.introAudio) {
+            window.introAudio.play().catch(e => console.log('Audio still failed:', e));
+        }
+    };
+    
+    document.addEventListener('click', removeMessage);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (message.parentNode) {
+            message.remove();
+            document.removeEventListener('click', removeMessage);
+        }
+    }, 5000);
+}
+
+// Show phase message
+function showPhaseMessage(message) {
+    const existingMessage = document.querySelector('.phase-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    const phaseMessage = document.createElement('div');
+    phaseMessage.className = 'phase-message';
+    phaseMessage.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-weight: 900;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        z-index: 10000;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        animation: phase-message-slide 0.5s ease-out;
+    `;
+    
+    phaseMessage.textContent = message;
+    document.body.appendChild(phaseMessage);
+    
+    setTimeout(() => {
+        phaseMessage.style.animation = 'phase-message-slide-out 0.5s ease-in forwards';
+        setTimeout(() => {
+            phaseMessage.remove();
+        }, 500);
+    }, 3000);
+}
+
+// Show emergency alert
+function showEmergencyAlert() {
+    const alert = document.createElement('div');
+    alert.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        z-index: 10000;
+        text-align: center;
+        font-weight: 900;
+        font-size: 1.25rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        animation: emergency-alert-popup 0.5s ease-out;
+    `;
+    
+    alert.innerHTML = `
+        🚨 EMERGENCY ALERT 🚨<br>
+        PANIC BUTTON ACTIVATED!<br>
+        HELP FAIZAN NOW!
+    `;
+    
+    document.body.appendChild(alert);
+    
+    setTimeout(() => {
+        alert.remove();
+    }, 3000);
+}
 
 // Enhanced phone link functionality
 function initPhoneLinks() {
